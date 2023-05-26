@@ -7,15 +7,15 @@ guess the word within the allotted number of guesses. The Hangman game will
 utilize classes to store the hidden word and guesses a class containing member
 methods used to track progress, and a class to represent the hangman figure.
 The game logic will be written using a variety of modern C++ features
-
 */
 
 #include "Hangman.h"
+#include <windows.h>
 
 std::vector<std::string> initVector(std::ifstream&);
 void validateInput(int&);
 void trimWordList(std::vector<std::string>&);
-
+void displayMenu();
 
 /************************GLOBAL CONSTANTS**************************************/
 const std::regex NUM_FILTER {"[^a-zA-Z]"};
@@ -36,6 +36,16 @@ std::vector<std::string> initVector(std::ifstream& inFile) {
     }
     inFile.close();
     return v;
+}
+
+
+
+void displayMenu() {
+    std::string welcome {"WELCOME TO HANGMAN!"};
+    std::cout << std::setfill('*') << std::setw(85) << '\n';
+    std::cout << std::setfill(' ') << std::setw(45) << welcome << std::setw(45) << '\n';
+    std::cout << std::setfill('*') << std::setw(85) << '\n';
+    std::cout << "\n\n";
 }
 
 
@@ -85,19 +95,20 @@ int main() {
 
     std::vector<std::string> drawing = initVector(manFile);
     std::vector<std::string> wordList = initVector(wordsFile);
-    //std::vector<std::string>filteredWords;
     int desiredLetters;
     Hangman gameMan(drawing);
-    /******************************************************************************/
+    /**************************************************************************/
 
     if (!(gameMan.readFile(manFile) || gameMan.readFile(wordsFile))) {
         return 1;
     }
 
-
+    displayMenu();
+    gameMan.renderFigure();
+    Sleep(5000);
+    system("cls");
     std::cout << "How many letters should the secret word be? => ";
     validateInput(desiredLetters);
-    gameMan.renderFigure();
     trimWordList(wordList);
 
     return 0;
