@@ -10,6 +10,7 @@ The game logic will be written using a variety of modern C++ features
 */
 
 #include "Hangman.h"
+#include "NPC.h"
 #include <windows.h>
 
 bool readFile(const std::ifstream&);
@@ -81,12 +82,7 @@ void trimWordList(std::vector<std::string>& v) {
             it++;
         }
     }
-
-    // Test - check trimmed vec
-   // for (auto& i : v) std::cout << i << std::endl;
 }
-
-
 
 
 /******************************************************************************/
@@ -111,6 +107,8 @@ int main() {
     trimWordList(wordList);
 
     Hangman gameMan(drawing);
+    NPC tracker(wordList);
+
     /**************************************************************************/
     do
     {
@@ -121,6 +119,8 @@ int main() {
         system("cls");
         std::cout << "How many letters should the secret word be? => ";
         validateInput(desiredLetters);
+        std::string secretWord = tracker.pickRandWord(desiredLetters);
+        std::cout << "Secret word this round is " << secretWord << '\n';
         std::cout << "New game? ['Y' 'N'] => ";
         std::cin >> newGame;
     } while (tolower(newGame) == 'y');

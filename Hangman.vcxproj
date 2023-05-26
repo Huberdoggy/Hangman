@@ -134,10 +134,12 @@
   <ItemGroup>
     <ClCompile Include="Hangman.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="NPC.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\external-deps\kyle-defines\common_includes.h" />
     <ClInclude Include="Hangman.h" />
+    <ClInclude Include="NPC.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
