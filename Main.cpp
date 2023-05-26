@@ -14,6 +14,8 @@ The game logic will be written using a variety of modern C++ features
 
 std::vector<std::string> initVector(std::ifstream&);
 void validateInput(int&);
+void trimWordList(std::vector<std::string>&);
+
 
 /************************GLOBAL CONSTANTS**************************************/
 const std::regex NUM_FILTER {"[^a-zA-Z]"};
@@ -49,14 +51,32 @@ void validateInput(int& user_input) {
 
 
 
+void trimWordList(std::vector<std::string>& v) {
+    auto it = v.begin(); // Store iterator
+    while (it != v.end())
+    {
+        if (std::regex_search(*it, NUM_FILTER) ||
+           ((*it).length() < MIN_LETTERS || (*it).length() > MAX_LETTERS)) {
+            it = v.erase(it); // Returns iterator pointing to 
+            // adjusted loc of next item in vec
+        }
+        else {
+            it++;
+        }
+    }
+
+    // Test - check trimmed vec
+   // for (auto& i : v) std::cout << i << std::endl;
+}
+
+
 
 
 /******************************************************************************/
 
 int main() {
 
-    /******************VARIABLE INITIALIZATIONS*********************************************/
-
+    /******************VARIABLE INITIALIZATIONS********************************/
     std::string manPath = std::getenv("STREAMFILE_DIR");
     manPath += "\\Hangman\\hangman.txt";
     std::string wordsPath = std::getenv("STREAMFILE_DIR");
@@ -65,6 +85,7 @@ int main() {
 
     std::vector<std::string> drawing = initVector(manFile);
     std::vector<std::string> wordList = initVector(wordsFile);
+    //std::vector<std::string>filteredWords;
     int desiredLetters;
     Hangman gameMan(drawing);
     /******************************************************************************/
@@ -77,17 +98,7 @@ int main() {
     std::cout << "How many letters should the secret word be? => ";
     validateInput(desiredLetters);
     gameMan.renderFigure();
-
-    for (int i = 0; i < wordList.size(); i++)
-    {
-        if (std::regex_search(wordList[i], NUM_FILTER) ||
-            (wordList[i].length() < MIN_LETTERS || wordList[i].length() > MAX_LETTERS)) {
-            
-            continue;
-        }
-        //std::cout << wordList[i] << '\n';
-    }
-
+    trimWordList(wordList);
 
     return 0;
 

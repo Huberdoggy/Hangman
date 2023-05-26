@@ -6,7 +6,7 @@ class Hangman
 {
 
 private:
-    std::vector<std::string> manVec;  // store lines read from input file to draw the man
+    static std::vector<std::string> manVec;  // store lines read from input file to draw the man
 
 public:
     Hangman(std::vector<std::string>& v) { // Constructor
@@ -21,3 +21,4 @@ public:
     bool readFile(std::ifstream& inFile) const;
     void renderFigure() const;
 };
+
