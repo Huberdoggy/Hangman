@@ -17,8 +17,6 @@ public:
 
     }
 
-
-    bool readFile(std::ifstream& inFile) const;
     void renderFigure() const;
 };
 

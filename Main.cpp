@@ -12,6 +12,7 @@ The game logic will be written using a variety of modern C++ features
 #include "Hangman.h"
 #include <windows.h>
 
+bool readFile(const std::ifstream&);
 std::vector<std::string> initVector(std::ifstream&);
 void validateInput(int&);
 void trimWordList(std::vector<std::string>&);
@@ -22,6 +23,12 @@ const std::regex NUM_FILTER {"[^a-zA-Z]"};
 constexpr int MIN_LETTERS{ 4 }, MAX_LETTERS{ 12 };
 
 /****************FUNCTION DEFINITIONS******************************************/
+bool readFile(const std::ifstream& inFile) {
+
+    return (!inFile) ? false : true;
+}
+
+
 std::vector<std::string> initVector(std::ifstream& inFile) {
 
     std::vector<std::string> v;
@@ -92,24 +99,31 @@ int main() {
     std::string wordsPath = std::getenv("STREAMFILE_DIR");
     wordsPath += "\\Hangman\\wordlist.txt";
     std::ifstream manFile(manPath), wordsFile(wordsPath);
-
-    std::vector<std::string> drawing = initVector(manFile);
-    std::vector<std::string> wordList = initVector(wordsFile);
     int desiredLetters;
-    Hangman gameMan(drawing);
-    /**************************************************************************/
+    char newGame{ 'y' };
 
-    if (!(gameMan.readFile(manFile) || gameMan.readFile(wordsFile))) {
+    if (!(readFile(manFile) || readFile(wordsFile))) {
         return 1;
     }
 
-    displayMenu();
-    gameMan.renderFigure();
-    Sleep(5000);
-    system("cls");
-    std::cout << "How many letters should the secret word be? => ";
-    validateInput(desiredLetters);
+    std::vector<std::string> drawing = initVector(manFile);
+    std::vector<std::string> wordList = initVector(wordsFile);
     trimWordList(wordList);
+
+    Hangman gameMan(drawing);
+    /**************************************************************************/
+    do
+    {
+        system("cls");
+        displayMenu();
+        gameMan.renderFigure();
+        Sleep(5000);
+        system("cls");
+        std::cout << "How many letters should the secret word be? => ";
+        validateInput(desiredLetters);
+        std::cout << "New game? ['Y' 'N'] => ";
+        std::cin >> newGame;
+    } while (tolower(newGame) == 'y');
 
     return 0;
 
