@@ -11,3 +11,14 @@ std::string NPC::pickRandWord(int num, const std::vector<std::string>& v) const 
     return (v[random].length() > num || v[random].length() < num) ? 
         pickRandWord(num, v) : v[random];
 }
+
+void NPC::setSecretWord(const std::string& s) {
+
+    secretWord = s;
+}
+
+
+std::string_view NPC::getSecretWord() const{
+
+    return secretWord;
+}

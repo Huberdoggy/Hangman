@@ -18,6 +18,7 @@ std::vector<std::string> initVector(std::ifstream&);
 void validateInput(int&);
 void trimWordList(std::vector<std::string>&);
 void displayMenu();
+void refreshView(int = 5000);
 
 /************************GLOBAL CONSTANTS**************************************/
 const std::regex NUM_FILTER {"[^a-zA-Z]"};
@@ -46,6 +47,11 @@ std::vector<std::string> initVector(std::ifstream& inFile) {
     return v;
 }
 
+
+void refreshView(int sleep_time) {
+    Sleep(sleep_time); // Default to 5 seconds
+    system("cls");
+}
 
 
 void displayMenu() {
@@ -115,12 +121,11 @@ int main() {
         system("cls");
         displayMenu();
         gameMan.renderFigure();
-        Sleep(5000);
-        system("cls");
+        refreshView();
         std::cout << "How many letters should the secret word be? => ";
         validateInput(desiredLetters);
-        std::string secretWord = tracker.pickRandWord(desiredLetters);
-        std::cout << "Secret word this round is " << secretWord << '\n';
+        tracker.setSecretWord(tracker.pickRandWord(desiredLetters));
+        std::cout << "Secret word this round is " << tracker.getSecretWord() << '\n';
         std::cout << "New game? ['Y' 'N'] => ";
         std::cin >> newGame;
     } while (tolower(newGame) == 'y');
