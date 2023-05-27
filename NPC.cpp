@@ -22,3 +22,12 @@ std::string_view NPC::getSecretWord() const{
 
     return secretWord;
 }
+
+
+void NPC::displayProgress() const {
+    std::cout << "\t\t";
+    for (int i = 0; i < secretWord.size(); i++)
+    {
+        std::cout << "_" << " ";
+    }
+}

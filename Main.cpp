@@ -106,6 +106,7 @@ int main() {
     wordsPath += "\\Hangman\\wordlist.txt";
     std::ifstream manFile(manPath), wordsFile(wordsPath);
     int desiredLetters;
+    const char* rightOffset = "\t\t\t\t\t\t";
     char newGame{ 'y' };
 
     if (!(readFile(manFile) || readFile(wordsFile))) {
@@ -129,8 +130,10 @@ int main() {
         std::cout << "How many letters should the secret word be? => ";
         validateInput(desiredLetters);
         tracker.setSecretWord(tracker.pickRandWord(desiredLetters));
-        std::cout << "Secret word this round is " << tracker.getSecretWord() << '\n';
-        std::cout << "New game? ['Y' 'N'] => ";
+        std::cout << "Secret word this round is " << tracker.getSecretWord() << "\n\n\n\n";
+        gameMan.renderFigure(rightOffset);
+        tracker.displayProgress();
+        std::cout << "\n\nNew game? ['Y' 'N'] => ";
         std::cin >> newGame;
     } while (tolower(newGame) == 'y');
 

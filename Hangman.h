@@ -17,6 +17,6 @@ public:
 
     }
 
-    void renderFigure() const;
+    void renderFigure(const std::optional<const char*> = std::nullopt) const;
 };
 

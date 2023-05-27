@@ -5,10 +5,17 @@
 std::vector<std::string> Hangman::manVec;
 
 
-void Hangman::renderFigure() const {
+void Hangman::renderFigure(const std::optional<const char*> fmtWidth) const {
 
     for (auto& i : manVec) {
-        std::cout << "\t\t\t\t" << i << '\n';
+        if (fmtWidth)
+        {
+            std::cout << *fmtWidth << i << '\n'; // Postion further across screen
+            // when game is running
+        }
+        else {
+            std::cout << "\t\t\t\t" << i << '\n'; // Opening menu - center screen
+        }
     }
 }
 
