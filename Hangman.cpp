@@ -5,17 +5,21 @@
 std::vector<std::string> Hangman::manVec;
 
 
-void Hangman::renderFigure(const std::optional<const char*> fmtWidth) const {
-
+void Hangman::renderFigure() const {
     for (auto& i : manVec) {
-        if (fmtWidth)
-        {
-            std::cout << *fmtWidth << i << '\n'; // Postion further across screen
-            // when game is running
-        }
-        else {
-            std::cout << "\t\t\t\t" << i << '\n'; // Opening menu - center screen
-        }
+
+        std::cout << "\t\t\t\t" << i << '\n'; // Opening menu - center screen
+    }
+}
+
+
+// Overload
+void Hangman::renderFigure(const char* fmtWidth, const int index) const {
+    // we are only going to add to the drawing displayed on screen if guess is wrong
+    // up to the point corresponding to the number of missed guesses
+    for (int i = 0; i < index; i++)
+    {
+        std::cout << fmtWidth << manVec[i] << '\n';
     }
 }
 

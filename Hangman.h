@@ -1,7 +1,6 @@
 #pragma once
 #include "common_includes.h"
 
-
 class Hangman
 {
 
@@ -14,9 +13,14 @@ public:
     }
 
     ~Hangman() { // Destructor
-
+        //std::cout << "Destroyed Hangman" << '\n';
+        //std::cin.get();
     }
 
-    void renderFigure(const std::optional<const char*> = std::nullopt) const;
+    void terminate_call() {
+        delete this;
+    }
+    void renderFigure(const char*, const int) const;
+    void renderFigure() const;
 };
 

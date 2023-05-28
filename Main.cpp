@@ -53,7 +53,7 @@ void refreshView(const std::optional<int> sleep_time) {
     {
         Sleep(*sleep_time);
     }
-    
+
     system("cls");
 }
 
@@ -94,7 +94,6 @@ void trimWordList(std::vector<std::string>& v) {
     }
 }
 
-
 /******************************************************************************/
 
 int main() {
@@ -107,7 +106,8 @@ int main() {
     std::ifstream manFile(manPath), wordsFile(wordsPath);
     int desiredLetters;
     const char* rightOffset = "\t\t\t\t\t\t";
-    char newGame{ 'y' };
+    char newGame{ 'y' }, letter;
+
 
     if (!(readFile(manFile) || readFile(wordsFile))) {
         return 1;
@@ -117,27 +117,67 @@ int main() {
     std::vector<std::string> wordList = initVector(wordsFile);
     trimWordList(wordList);
 
-    Hangman gameMan(drawing);
-    NPC tracker(wordList);
-
     /**************************************************************************/
     do
     {
+
+        Hangman* gameMan = new Hangman(drawing);
+
+        int* i_ptr = nullptr, inside_count = 0;
         refreshView();
         displayMenu();
-        gameMan.renderFigure();
+        gameMan->renderFigure();
         refreshView(5000);
         std::cout << "How many letters should the secret word be? => ";
         validateInput(desiredLetters);
-        tracker.setSecretWord(tracker.pickRandWord(desiredLetters));
-        std::cout << "Secret word this round is " << tracker.getSecretWord() << "\n\n\n\n";
-        gameMan.renderFigure(rightOffset);
-        tracker.displayProgress();
+        NPC* tracker = new NPC(wordList, desiredLetters);
+        tracker->setSecretWord(tracker->pickRandWord(desiredLetters));
+        tracker->reveal = tracker->initBlanks(desiredLetters, tracker->reveal); // set the game 'tiles' to empties
+        std::cout << "Secret word this round is " << tracker->getSecretWord() << "\n\n\n\n";
+        refreshView(5000);
+
+
+        while (tracker->num_guesses < drawing.size()) {
+            if (tracker->letters_remaining == 0)
+                break;
+
+            tracker->getGuess(letter);
+            refreshView();
+
+            for (int i = 0; i < tracker->secretWord.size(); i++) {
+
+                i_ptr = tracker->handleGuess(letter, i);
+
+                if (i_ptr == &tracker->letters_remaining)
+                {
+                    tracker->reveal[i] = letter;
+                    inside_count++; // ensure if ptr leaves off on a miss, theres something tracking that we DID find something
+                }
+
+            } // end for
+            
+            if (inside_count > 0 && tracker->letters_remaining > 0) {
+                tracker->letters_remaining -= 1;
+            }
+            else if (i_ptr == &tracker->num_guesses)
+                tracker->num_guesses += 1;
+            gameMan->renderFigure(rightOffset, tracker->num_guesses);
+            std::cout << "\t\t" << tracker->reveal;
+            inside_count = 0; // reset it
+            refreshView(5000);
+
+        } // end inner while
+
+        i_ptr = nullptr;
+        gameMan->terminate_call();
+        tracker->terminate_call();
+        refreshView();
         std::cout << "\n\nNew game? ['Y' 'N'] => ";
         std::cin >> newGame;
-    } while (tolower(newGame) == 'y');
+
+
+    } while (tolower(newGame) == 'y'); // end game loop while
 
     return 0;
-
 }
 
