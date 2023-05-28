@@ -133,10 +133,9 @@ int main() {
         NPC* tracker = new NPC(wordList, desiredLetters);
         tracker->setSecretWord(tracker->pickRandWord(desiredLetters));
         tracker->reveal = tracker->initBlanks(desiredLetters, tracker->reveal); // set the game 'tiles' to empties
-        std::cout << "Secret word this round is " << tracker->getSecretWord() << "\n\n\n\n";
+        refreshView(1000);
+        std::cout << "\n\nGET READY!\t\t" << tracker->reveal << "\n\n"; // Show them the starting num of blanks
         refreshView(5000);
-
-
         while (tracker->num_guesses < drawing.size()) {
             if (tracker->letters_remaining == 0)
                 break;
@@ -148,30 +147,31 @@ int main() {
 
                 i_ptr = tracker->handleGuess(letter, i);
 
-                if (i_ptr == &tracker->letters_remaining)
+                if (i_ptr != nullptr) // Found match
                 {
                     tracker->reveal[i] = letter;
-                    inside_count++; // ensure if ptr leaves off on a miss, theres something tracking that we DID find something
+                    inside_count++; // ensure if ptr exits 'for' on a miss, 
+                    //theres something tracking that we DID find something on a previously iterated letter
                 }
 
             } // end for
-            
+
             if (inside_count > 0 && tracker->letters_remaining > 0) {
                 tracker->letters_remaining -= 1;
             }
-            else if (i_ptr == &tracker->num_guesses)
+            else if (i_ptr == nullptr) // No letters found prev iteration
                 tracker->num_guesses += 1;
             gameMan->renderFigure(rightOffset, tracker->num_guesses);
-            std::cout << "\t\t" << tracker->reveal;
-            inside_count = 0; // reset it
+            std::cout << "\t\t" << tracker->reveal << "\n\n";
+            inside_count = 0; // Reset this counter so that next letter entered starts on clean slate
             refreshView(5000);
-
         } // end inner while
 
         i_ptr = nullptr;
         gameMan->terminate_call();
         tracker->terminate_call();
         refreshView();
+        std::cout << "Secret word this round was: " << tracker->getSecretWord() << "\n\n";
         std::cout << "\n\nNew game? ['Y' 'N'] => ";
         std::cin >> newGame;
 

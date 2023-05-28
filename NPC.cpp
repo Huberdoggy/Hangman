@@ -15,16 +15,12 @@ std::string NPC::pickRandWord(int num, const std::vector<std::string>& v) const 
 
 char* NPC::initBlanks(const int size, char* s) {
     s = new char[size];
-    for (int i = 0; i <= size; i++)
+
+    for (int i = 0; i < size; i++)
     {
-        if (i == size)
-        {
-            *(s + i) = '\0';
-        }
-        else {
-            *(s + i) = '_';
-        }
+        *(s + i) = '_';
     }
+    *(s + size) = '\0';
 
     return s;
 }
@@ -53,11 +49,10 @@ int* NPC::handleGuess(const char& letter, const int iterator) {
     int* ptr = new int;
     if (secretWord[iterator] == letter) {
 
-        ptr = &letters_remaining;
-    }
-    else {
-        ptr = &num_guesses;
+        ptr = &letters_remaining; // Only returning ptr here as a way to convenientally track
+        // if this iteration's chosen letter is hit or miss. Comparing addresses in main()
+        return ptr;
     }
 
-    return ptr;
+    return nullptr;
 }
