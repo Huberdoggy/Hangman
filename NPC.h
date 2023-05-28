@@ -11,13 +11,13 @@ public:
     static std::string secretWord;
     char* reveal;
     int num_guesses;
-    int letters_remaining;
+    int dummyData;
 
 
-    NPC(std::vector<std::string>& v, const int s) {
+    NPC(std::vector<std::string>& v) {
         srand(static_cast<unsigned>(time(0))); // Upon instance creation, seed rand
         wordVec = v;
-        letters_remaining = s; // set based on user's chosen number of letters per game round
+        dummyData = 1; // set simply so pointer will not be null later (see handleGuess0
         reveal = nullptr;
         num_guesses = 0;
         

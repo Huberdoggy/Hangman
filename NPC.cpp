@@ -49,7 +49,7 @@ int* NPC::handleGuess(const char& letter, const int iterator) {
     int* ptr = new int;
     if (secretWord[iterator] == letter) {
 
-        ptr = &letters_remaining; // Only returning ptr here as a way to convenientally track
+        ptr = &dummyData; // Only returning ptr here as a way to convenientally track
         // if this iteration's chosen letter is hit or miss. Comparing addresses in main()
         return ptr;
     }

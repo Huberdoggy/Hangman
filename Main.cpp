@@ -130,15 +130,16 @@ int main() {
         refreshView(5000);
         std::cout << "How many letters should the secret word be? => ";
         validateInput(desiredLetters);
-        NPC* tracker = new NPC(wordList, desiredLetters);
+        NPC* tracker = new NPC(wordList);
         tracker->setSecretWord(tracker->pickRandWord(desiredLetters));
         tracker->reveal = tracker->initBlanks(desiredLetters, tracker->reveal); // set the game 'tiles' to empties
         refreshView(1000);
         std::cout << "\n\nGET READY!\t\t" << tracker->reveal << "\n\n"; // Show them the starting num of blanks
+        std::cout << "Secret word this round is: " << tracker->getSecretWord() << "\n\n"; // For debugging
         refreshView(5000);
         while (tracker->num_guesses < drawing.size()) {
-            if (tracker->letters_remaining == 0)
-                break;
+            if (tracker->secretWord == tracker->reveal)
+                break; // Winner
 
             tracker->getGuess(letter);
             refreshView();
@@ -156,11 +157,7 @@ int main() {
 
             } // end for
 
-            if (inside_count > 0 && tracker->letters_remaining > 0) {
-                tracker->letters_remaining -= 1;
-            }
-            else if (i_ptr == nullptr) // No letters found prev iteration
-                tracker->num_guesses += 1;
+            tracker->num_guesses = (inside_count == 0) ? tracker->num_guesses + 1 : tracker->num_guesses; // No letters found prev iteration
             gameMan->renderFigure(rightOffset, tracker->num_guesses);
             std::cout << "\t\t" << tracker->reveal << "\n\n";
             inside_count = 0; // Reset this counter so that next letter entered starts on clean slate
