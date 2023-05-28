@@ -17,7 +17,7 @@ public:
     NPC(std::vector<std::string>& v) {
         srand(static_cast<unsigned>(time(0))); // Upon instance creation, seed rand
         wordVec = v;
-        dummyData = 1; // set simply so pointer will not be null later (see handleGuess0
+        dummyData = 1; // set simply so pointer will not be null later. See handleGuess
         reveal = nullptr;
         num_guesses = 0;
         

@@ -135,7 +135,6 @@ int main() {
         tracker->reveal = tracker->initBlanks(desiredLetters, tracker->reveal); // set the game 'tiles' to empties
         refreshView(1000);
         std::cout << "\n\nGET READY!\t\t" << tracker->reveal << "\n\n"; // Show them the starting num of blanks
-        std::cout << "Secret word this round is: " << tracker->getSecretWord() << "\n\n"; // For debugging
         refreshView(5000);
         while (tracker->num_guesses < drawing.size()) {
             if (tracker->secretWord == tracker->reveal)
